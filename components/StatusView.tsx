@@ -6,9 +6,9 @@ import { deleteItem, saveLijn } from "@/app/actions";
 import { addDays, fmtDate, mondayOf } from "@/lib/dates";
 import { newId } from "@/lib/format";
 import { STATUS_LABEL, STATUS_ORDER, type Lijn, type PlanItem, type Status, type Todo } from "@/lib/types";
+import { Aandacht } from "./Aandacht";
 import { useCollection, useEdit } from "./EditProvider";
 import { Sheet } from "./Sheet";
-import { StatusCircles } from "./StatusCircles";
 import { DeleteButton, PageHeader, Pill, Segmented, Toggle, WeekNav } from "./ui";
 import { GRID_WEEKS, WeekGrid } from "./WeekGrid";
 
@@ -72,7 +72,7 @@ export function StatusView({
 
       <section className="panel">
         <h2 className="panel-title display">Hoe staan we ervoor?</h2>
-        <StatusCircles lijnen={lijnen} />
+        <Aandacht lijnen={lijnen} todos={todos} planning={planning} today={today} onOpenLijn={setEditing} />
       </section>
 
       <section className="panel">

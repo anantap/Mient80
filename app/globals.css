@@ -529,63 +529,126 @@ a {
   border-radius: 50% 50% 50% 0;
 }
 
-/* ───────────── Cirkels ───────────── */
-.circles {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 220px));
-  gap: clamp(12px, 2.5vw, 28px);
+/* ───────────── Aandachtspunten ───────────── */
+.pill-verlopen {
+  --tone-bg: var(--danger-soft);
+  --tone-dot: var(--danger);
+  --tone-line: var(--danger);
 }
-.circle {
-  margin: 0;
-  aspect-ratio: 1;
+.pill-binnenkort {
+  --tone-bg: var(--accent-soft);
+  --tone-dot: var(--accent-text);
+  --tone-line: var(--accent);
 }
-.circle svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  overflow: visible;
+.pill-binnenkort .dot {
+  display: none;
 }
-.circle-fill {
-  fill: var(--circle);
-  stroke: var(--circle-line);
-  stroke-width: 2;
+.stand {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
 }
-.circle-loopt {
-  --circle: var(--c-loopt);
-  --circle-line: var(--c-loopt-line);
+.stand-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
-.circle-wacht {
-  --circle: var(--c-wacht);
-  --circle-line: var(--c-wacht-line);
-}
-.circle-geblokkeerd {
-  --circle: var(--c-geblokkeerd);
-  --circle-line: var(--c-geblokkeerd-line);
-}
-.circle-klaar {
-  --circle: var(--c-klaar);
-  --circle-line: var(--c-klaar-line);
-  --c-ink: #ffffff;
-}
-.circle-num {
+.stand-item strong {
   font-family: var(--font-wide);
   font-stretch: 125%;
-  font-size: 80px;
-  font-weight: 800;
-  fill: var(--c-ink);
-  font-variant-numeric: lining-nums tabular-nums;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  color: var(--text);
 }
-.circle-arc {
-  font-family: var(--font-body);
-  font-size: 14px;
+.stand-item.is-zero strong {
+  color: var(--text-faint);
+}
+.punten {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.punt {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  text-align: left;
+  transition: border-color 0.2s ease;
+}
+.punt:hover {
+  border-color: var(--text-faint);
+}
+.punt:hover .punt-arrow {
+  color: var(--accent-text);
+  transform: translateX(2px);
+}
+.punt-tag .pill {
+  max-width: 100%;
+}
+.punt-body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.punt-titel {
   font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  fill: var(--c-ink);
+  font-size: 14px;
+  line-height: 1.35;
 }
-.circle-arc-top {
-  font-size: 11.5px;
-  opacity: 0.65;
+.punt-flag {
+  margin-left: 6px;
+  vertical-align: -1px;
+  color: var(--geblokkeerd-dot);
+}
+.punt-sub {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--text-dim);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.punt-arrow {
+  color: var(--text-faint);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+@media (max-width: 600px) {
+  .punt {
+    grid-template-columns: minmax(0, 1fr) 16px;
+    gap: 8px 10px;
+  }
+  .punt-tag {
+    grid-column: 1 / -1;
+  }
+  .punt-arrow {
+    grid-row: 2;
+    grid-column: 2;
+  }
+  .stand {
+    gap: 6px 16px;
+  }
+  .stand-item strong {
+    font-size: 18px;
+  }
 }
 
 /* ───────────── Filters ───────────── */
@@ -1662,12 +1725,6 @@ textarea:focus {
 }
 
 /* ───────────── Mobiel ───────────── */
-@media (max-width: 1100px) {
-  .circles {
-    grid-template-columns: repeat(2, minmax(0, 210px));
-  }
-}
-
 @media (max-width: 760px) {
   .sidebar {
     inset: auto 0 0 0;
@@ -1721,10 +1778,6 @@ textarea:focus {
   .page-head-actions {
     width: 100%;
     justify-content: space-between;
-  }
-  .circles {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
   }
   .cards {
     grid-template-columns: 1fr;
