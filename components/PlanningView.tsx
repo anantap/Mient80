@@ -5,15 +5,13 @@ import { useEffect, useRef, useState } from "react";
 import { deleteItem, savePlanItem } from "@/app/actions";
 import { addDays, diffDays, fmtDate, fmtWeekRange, isoWeek, MAANDEN_KORT, mondayOf, parseISO } from "@/lib/dates";
 import { newId } from "@/lib/format";
+import { planRange } from "@/lib/planning";
 import { PARTIJEN, PLAN_TYPE_LABEL, type Partij, type PlanItem, type PlanType } from "@/lib/types";
 import { useCollection } from "./EditProvider";
 import { planIcon } from "./partij";
 import { Sheet } from "./Sheet";
 import { DeleteButton, PageHeader, Segmented, Toggle } from "./ui";
 
-/** Standaardbereik: okt 2026 t/m apr 2027 (ISO-week 40/2026 t/m 17/2027) */
-const RANGE_START = "2026-09-28";
-const RANGE_END = "2027-05-02";
 const WEEK_W = 52;
 const DAY_W = WEEK_W / 7;
 
@@ -43,9 +41,7 @@ export function PlanningView({ initial, today }: { initial: PlanItem[]; today: s
   const [editing, setEditing] = useState<PlanItem | null>(null);
 
   const sorted = [...items].sort((a, b) => a.start.localeCompare(b.start) || end(a).localeCompare(end(b)));
-  const first = sorted.reduce((m, i) => (i.start < m ? i.start : m), RANGE_START);
-  const last = sorted.reduce((m, i) => (end(i) > m ? end(i) : m), RANGE_END);
-  const start = mondayOf(first);
+  const { start, end: last } = planRange(sorted);
   const weekCount = Math.ceil((diffDays(start, last) + 1) / 7);
   const weeks = Array.from({ length: weekCount }, (_, n) => addDays(start, n * 7));
 

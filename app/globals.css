@@ -529,6 +529,228 @@ a {
   border-radius: 50% 50% 50% 0;
 }
 
+/* ───────────── Tijdlijn met momenten ───────────── */
+.momenten {
+  display: block;
+}
+.mt-line {
+  position: relative;
+  height: 210px;
+  margin: 0 8px;
+}
+.mt-track,
+.mt-progress {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  border-radius: 1px;
+}
+.mt-track {
+  right: 0;
+  background: var(--line);
+}
+.mt-progress {
+  background: var(--accent);
+}
+.mt-month {
+  position: absolute;
+  top: calc(50% + 8px);
+  transform: translateX(-50%);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.mt-month::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -9px;
+  width: 1px;
+  height: 6px;
+  background: var(--line);
+}
+.mt-today {
+  position: absolute;
+  top: 6px;
+  bottom: calc(50% - 10px);
+  width: 0;
+  border-left: 1px dashed var(--accent-text);
+}
+.mt-today span {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.mt-dot {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: var(--text);
+  border: 2px solid var(--bg-alt);
+  box-shadow: 0 0 0 1px var(--text);
+  z-index: 1;
+}
+.mt-dot.is-critical {
+  background: var(--geblokkeerd-dot);
+  box-shadow: 0 0 0 1px var(--geblokkeerd-dot);
+}
+.mt-dot.is-done {
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  background: var(--accent-text);
+  box-shadow: none;
+  border: 0;
+}
+.mt-dot.is-dashed {
+  background: var(--bg-alt);
+  box-shadow: none;
+  border: 1.5px dashed var(--text-dim);
+}
+.mt-label {
+  position: absolute;
+  width: 128px;
+  padding-left: 8px;
+  border-left: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.mt-label.is-flip {
+  transform: translateX(-100%);
+  padding: 0 8px 0 0;
+  border-left: 0;
+  border-right: 1px solid var(--line);
+  text-align: right;
+}
+.mt-boven-1 {
+  bottom: calc(50% + 10px);
+}
+.mt-boven-2 {
+  bottom: calc(50% + 10px);
+  padding-bottom: 42px;
+}
+.mt-onder-1 {
+  top: calc(50% + 24px);
+}
+.mt-onder-2 {
+  top: calc(50% + 24px);
+  padding-top: 42px;
+}
+.mt-date {
+  font-family: var(--font-wide);
+  font-stretch: 125%;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.mt-title {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.momenten:hover .mt-title {
+  color: var(--text);
+}
+.mt-vertical {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 4px;
+}
+.mt-vertical li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 58px 1fr;
+  gap: 10px;
+  padding: 7px 0 7px 22px;
+  font-size: 13px;
+}
+.mt-vertical li::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--line);
+}
+.mt-vertical li:first-child::before {
+  top: 50%;
+}
+.mt-vertical li:last-child::before {
+  bottom: 50%;
+}
+.mt-vertical .mt-dot {
+  left: 6px;
+}
+.mt-vertical .is-past {
+  color: var(--text-dim);
+}
+.mtv-date {
+  font-family: var(--font-wide);
+  font-stretch: 125%;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  padding-top: 2px;
+}
+.mtv-title {
+  font-weight: 600;
+  line-height: 1.35;
+}
+.mtv-today .mtv-title,
+.mtv-today .mtv-date {
+  color: var(--accent-text);
+  text-transform: uppercase;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+.mt-today-dot {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 12px;
+  height: 2px;
+  margin-top: -1px;
+  background: var(--accent-text);
+  z-index: 1;
+}
+@media (max-width: 760px) {
+  .mt-line {
+    display: none;
+  }
+  .mt-vertical {
+    display: block;
+  }
+}
+
 /* ───────────── Aandachtspunten ───────────── */
 .pill-verlopen {
   --tone-bg: var(--danger-soft);

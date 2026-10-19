@@ -7,6 +7,7 @@ import { addDays, fmtDate, mondayOf } from "@/lib/dates";
 import { newId } from "@/lib/format";
 import { STATUS_LABEL, STATUS_ORDER, type Lijn, type PlanItem, type Status, type Todo } from "@/lib/types";
 import { Aandacht } from "./Aandacht";
+import { Momenten } from "./Momenten";
 import { useCollection, useEdit } from "./EditProvider";
 import { Sheet } from "./Sheet";
 import { DeleteButton, PageHeader, Pill, Segmented, Toggle, WeekNav } from "./ui";
@@ -69,6 +70,11 @@ export function StatusView({
           <Plus size={16} /> Lijn toevoegen
         </button>
       </PageHeader>
+
+      <section className="panel">
+        <h2 className="panel-title display">Tijdlijn</h2>
+        <Momenten planning={planning} today={today} />
+      </section>
 
       <section className="panel">
         <h2 className="panel-title display">Hoe staan we ervoor?</h2>
