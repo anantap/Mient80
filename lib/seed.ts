@@ -184,6 +184,7 @@ export const SEED: Collections = {
     { id: "p6", titel: "Start Multimar", type: "periode", start: "2027-01-04", eind: "2027-01-15", partij: "multimar", klaar: false, kritiek: true, onzeker: false, notitie: "Begin januari, week 1–2" },
     { id: "p7", titel: "Levering Baboon", type: "periode", start: "2027-01-18", eind: "2027-01-22", partij: "baboon", klaar: false, kritiek: true, onzeker: false, notitie: "Week 3" },
     { id: "p8", titel: "Plaatsing keuken", type: "periode", start: "2027-01-25", eind: "2027-01-29", partij: "baasklus", klaar: false, kritiek: false, onzeker: false, notitie: "Rond week 4 (eerdere planning)" },
+    { id: "p10", titel: "Showroomafspraak Hans van der Helm, 15:00", type: "mijlpaal", start: "2026-10-30", eind: null, partij: "hvdh", klaar: false, kritiek: false, onzeker: false, notitie: "Met Yrsha, Weimarstraat 173. Voordeligere opties voor oven, kookplaat en koelkast bespreken (Proline glanzend zwart, opbouwkookplaat, oven zonder wifi)." },
     { id: "p9", titel: "Uitwijkvenster plaatsing", type: "periode", start: "2027-03-15", eind: "2027-03-31", partij: "baasklus", klaar: false, kritiek: false, onzeker: true, notitie: "Als de levering niet op tijd bevestigd is" },
   ],
 };

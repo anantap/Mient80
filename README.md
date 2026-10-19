@@ -27,9 +27,9 @@ Next.js (App Router, TypeScript) op Vercel, data in Upstash Redis.
    Bestaande data wordt nooit overschreven, dus je kunt hem veilig opnieuw draaien. De site doet dit ook zelf
    bij het eerste bezoek aan een nieuwe, lege database; een collectie die je zelf leegmaakt, blijft leeg.
 
-   Daarna voert de seed eenmalige migraties uit (`lib/migrations.ts`) voor een database die al gevuld was,
-   zoals het invullen van de offerte van Hans van der Helm. Een migratie past alleen data aan die nog in de
-   oorspronkelijke vorm staat; wat je zelf in de site hebt gewijzigd, blijft staan.
+   Aanvullingen voor een database die al gevuld is (`lib/migrations.ts`, zoals de offerte en de
+   showroomafspraak van Hans van der Helm) past de site zelf één keer toe. Een migratie raakt alleen data
+   die nog in de oorspronkelijke vorm staat; wat je zelf in de site hebt gewijzigd of verwijderd, blijft zo.
 
 ## Lokaal ontwikkelen
 

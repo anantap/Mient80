@@ -1,4 +1,5 @@
 import type { Redis } from "@upstash/redis";
+import { MIGRATIONS } from "./migrations";
 import { createRedis, KEY_PREFIX } from "./redis";
 import { SEED } from "./seed";
 import type { CollectionName, Collections } from "./types";
@@ -49,7 +50,7 @@ function sorted<K extends CollectionName>(entries: Record<string, Entry<Item<K>>
     .map((e) => e.item) as Collections[K];
 }
 
-async function readEntries<K extends CollectionName>(redis: Redis, name: K): Promise<Record<string, Entry<Item<K>>>> {
+async function loadEntries<K extends CollectionName>(redis: Redis, name: K): Promise<Record<string, Entry<Item<K>>>> {
   const hash = await redis.hgetall<Record<string, Entry<Item<K>>>>(hashKey(name));
   if (hash && Object.keys(hash).length > 0) return hash;
 
@@ -75,6 +76,25 @@ async function readEntries<K extends CollectionName>(redis: Redis, name: K): Pro
     return entries;
   }
   return {};
+}
+
+const applied = new Set<string>();
+
+/** Leest een collectie en past openstaande migraties één keer toe. */
+async function readEntries<K extends CollectionName>(redis: Redis, name: K): Promise<Record<string, Entry<Item<K>>>> {
+  const entries = await loadEntries(redis, name);
+  for (const m of MIGRATIONS) {
+    if (m.collection !== name || applied.has(m.id)) continue;
+    applied.add(m.id);
+    const first = (await redis.set(`${KEY_PREFIX}migratie:${m.id}`, new Date().toISOString(), { nx: true })) === "OK";
+    if (!first) continue;
+    const items = (m.apply(sorted<K>(entries) as never) ?? []) as Item<K>[];
+    if (items.length === 0) continue;
+    const update = Object.fromEntries(items.map((item) => [item.id, { pos: entries[item.id]?.pos ?? Date.now(), item }]));
+    await redis.hset(hashKey(name), update);
+    Object.assign(entries, update);
+  }
+  return entries;
 }
 
 export async function read<K extends CollectionName>(name: K): Promise<Collections[K]> {
