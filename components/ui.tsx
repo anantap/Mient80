@@ -2,7 +2,7 @@
 
 import { Check, ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { fmtWeekRange, isoWeek } from "@/lib/dates";
+import { addDays, fmtWeekRange, isoWeek } from "@/lib/dates";
 
 export function PageHeader({ title, children }: { title: string; children?: React.ReactNode }) {
   return (
@@ -16,15 +16,24 @@ export function PageHeader({ title, children }: { title: string; children?: Reac
   );
 }
 
-export function WeekNav({ monday, onShift }: { monday: string; onShift: (weeks: number) => void }) {
+export function WeekNav({
+  monday,
+  weeks = 1,
+  onShift,
+}: {
+  monday: string;
+  weeks?: number;
+  onShift: (weeks: number) => void;
+}) {
   const { week } = isoWeek(monday);
+  const last = isoWeek(addDays(monday, (weeks - 1) * 7)).week;
   return (
     <div className="weeknav">
       <button type="button" className="icon-btn" onClick={() => onShift(-1)} aria-label="Vorige week">
         <ChevronLeft size={16} />
       </button>
       <button type="button" className="weeknav-label" onClick={() => onShift(0)} title="Naar deze week">
-        Week {week} · {fmtWeekRange(monday)}
+        {weeks > 1 ? `Week ${week} – ${last}` : `Week ${week}`} · {fmtWeekRange(monday, weeks * 7)}
       </button>
       <button type="button" className="icon-btn" onClick={() => onShift(1)} aria-label="Volgende week">
         <ChevronRight size={16} />

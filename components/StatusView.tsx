@@ -10,7 +10,7 @@ import { useCollection, useEdit } from "./EditProvider";
 import { Sheet } from "./Sheet";
 import { StatusCircles } from "./StatusCircles";
 import { DeleteButton, PageHeader, Pill, Segmented, Toggle, WeekNav } from "./ui";
-import { WeekGrid } from "./WeekGrid";
+import { GRID_WEEKS, WeekGrid } from "./WeekGrid";
 
 type Filter = "open" | "kritiek" | "alles";
 
@@ -58,7 +58,7 @@ export function StatusView({
   return (
     <>
       <PageHeader title="Status">
-        <WeekNav monday={monday} onShift={shiftWeek} />
+        <WeekNav monday={monday} weeks={GRID_WEEKS} onShift={shiftWeek} />
         <button
           type="button"
           className="btn btn-outline"

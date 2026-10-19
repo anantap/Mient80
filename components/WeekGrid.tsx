@@ -1,10 +1,23 @@
 import { Check } from "lucide-react";
-import { addDays, DAGEN_KORT, fmtDay } from "@/lib/dates";
+import { addDays, fmtDate, fmtWeekRange, isoWeek, mondayOf } from "@/lib/dates";
 import { PARTIJEN, type PlanItem, type Todo } from "@/lib/types";
 import { PARTIJ_ICON, PARTIJ_INITIALEN, planIcon, TodoIcon } from "./partij";
 
-function covers(item: PlanItem, day: string): boolean {
-  return item.start <= day && (item.eind ?? item.start) >= day;
+export const GRID_WEEKS = 6;
+
+const end = (i: PlanItem) => i.eind ?? i.start;
+
+function inWeek(item: PlanItem, monday: string): boolean {
+  return item.start <= addDays(monday, 6) && end(item) >= monday;
+}
+
+/** Korte datumhint per kaartje: datum van een mijlpaal, of tot wanneer een periode loopt. */
+function hint(item: PlanItem, monday: string): string {
+  if (item.type !== "periode") return fmtDate(item.start, false);
+  const sunday = addDays(monday, 6);
+  if (item.start >= monday && end(item) <= sunday) return `${fmtDate(item.start, false)} – ${fmtDate(end(item), false)}`;
+  if (item.start >= monday) return `vanaf ${fmtDate(item.start, false)}`;
+  return `t/m ${fmtDate(end(item), false)}`;
 }
 
 export function WeekGrid({
@@ -18,9 +31,10 @@ export function WeekGrid({
   planning: PlanItem[];
   todos: Todo[];
 }) {
-  const days = Array.from({ length: 5 }, (_, i) => addDays(monday, i));
+  const weeks = Array.from({ length: GRID_WEEKS }, (_, i) => addDays(monday, i * 7));
+  const thisMonday = mondayOf(today);
   const rows = PARTIJEN.filter(
-    (p) => p.id !== "overig" || planning.some((i) => i.partij === "overig" && days.some((d) => covers(i, d))),
+    (p) => p.id !== "overig" || planning.some((i) => i.partij === "overig" && weeks.some((w) => inWeek(i, w))),
   );
 
   return (
@@ -29,10 +43,10 @@ export function WeekGrid({
         <thead>
           <tr>
             <th className="wg-corner" />
-            {days.map((d, i) => (
-              <th key={d} className={d === today ? "wg-today" : undefined}>
-                <span className="wg-day">{DAGEN_KORT[i]}</span>
-                <span className="wg-date">{fmtDay(d)}</span>
+            {weeks.map((w) => (
+              <th key={w} className={w === thisMonday ? "wg-today" : undefined}>
+                <span className="wg-day">Wk {isoWeek(w).week}</span>
+                <span className="wg-date">{fmtWeekRange(w)}</span>
               </th>
             ))}
           </tr>
@@ -48,13 +62,16 @@ export function WeekGrid({
                   </span>
                   {p.naam}
                 </th>
-                {days.map((d) => {
-                  const items = planning.filter((i) => i.partij === p.id && covers(i, d));
-                  const due = p.id === "wij" ? todos.filter((t) => !t.klaar && t.deadline === d) : [];
-                  const empty = items.length === 0 && due.length === 0;
+                {weeks.map((w) => {
+                  const sunday = addDays(w, 6);
+                  const items = planning.filter((i) => i.partij === p.id && inWeek(i, w));
+                  const due =
+                    p.id === "wij"
+                      ? todos.filter((t) => !t.klaar && t.deadline && t.deadline >= w && t.deadline <= sunday)
+                      : [];
                   return (
-                    <td key={d} className={d === today ? "wg-col-today" : undefined}>
-                      {empty ? (
+                    <td key={w} className={w === thisMonday ? "wg-col-today" : undefined}>
+                      {items.length === 0 && due.length === 0 ? (
                         <div className="wg-empty" aria-label="Niets gepland" />
                       ) : (
                         <div className="wg-stack">
@@ -66,14 +83,20 @@ export function WeekGrid({
                                 className={`wg-card party-${p.id}${i.klaar ? " is-done" : ""}${i.onzeker ? " is-dashed" : ""}${i.kritiek ? " is-critical" : ""}`}
                               >
                                 <ItemIcon size={14} />
-                                <span>{i.titel}</span>
+                                <span>
+                                  {i.titel}
+                                  <span className="wg-hint">{hint(i, w)}</span>
+                                </span>
                               </div>
                             );
                           })}
                           {due.map((t) => (
                             <div key={t.id} className="wg-card party-wij">
                               <TodoIcon size={14} />
-                              <span>{t.titel}</span>
+                              <span>
+                                {t.titel}
+                                <span className="wg-hint">deadline {fmtDate(t.deadline!, false)}</span>
+                              </span>
                             </div>
                           ))}
                         </div>
