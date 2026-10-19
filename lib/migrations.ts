@@ -31,4 +31,17 @@ export const MIGRATIONS: Migration[] = [
     collection: "planning",
     apply: (items) => ((items as Collections["planning"]).some((i) => i.id === "p10") ? null : seedItems("planning", ["p10"])),
   } as Migration,
+  {
+    id: "2027-01-planning-multimar-baasklus",
+    collection: "planning",
+    apply: (items) => {
+      const plan = items as Collections["planning"];
+      const seed = seedItems("planning", ["p6", "p8"]);
+      // Alleen bijwerken wat nog op de oorspronkelijke planning staat.
+      const p6 = plan.find((i) => i.id === "p6" && i.start === "2027-01-04" && i.notitie === "Begin januari, week 1–2");
+      const p8 = plan.find((i) => i.id === "p8" && i.start === "2027-01-25" && i.eind === "2027-01-29");
+      const update = seed.filter((i) => (i.id === "p6" && p6) || (i.id === "p8" && p8));
+      return update.length ? update : null;
+    },
+  } as Migration,
 ];
