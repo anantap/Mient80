@@ -44,4 +44,30 @@ export const MIGRATIONS: Migration[] = [
       return update.length ? update : null;
     },
   } as Migration,
+  {
+    id: "2026-10-radiator-muurstuk-opgemeten",
+    collection: "todos",
+    apply: (items) => {
+      const todos = items as Collections["todos"];
+      const seed = seedItems("todos", ["t6", "t7"]);
+      // Alleen bijwerken wat nog in de oorspronkelijke vorm staat.
+      const t6 = todos.find((t) => t.id === "t6" && t.notitie === "");
+      const t7 = todos.find((t) => t.id === "t7" && !t.klaar && !t.notitie.includes("Opgemeten"));
+      const update = seed
+        .filter((t) => (t.id === "t6" && t6) || (t.id === "t7" && t7))
+        .map((t) => (t.id === "t6" && t6 ? { ...t6, notitie: t.notitie } : t.id === "t7" && t7 ? { ...t7, klaar: true, afgevinkt: "2026-10-19", notitie: t.notitie } : t));
+      return update.length ? update : null;
+    },
+  } as Migration,
+  {
+    id: "2026-10-radiator-volgende-stap",
+    collection: "lijnen",
+    apply: (items) => {
+      const l7 = (items as Collections["lijnen"]).find(
+        (l) => l.id === "l7" && l.volgendeStap === "Muurstuk opmeten en een hoge kolomradiator kiezen",
+      );
+      const seed = seedItems("lijnen", ["l7"])[0];
+      return l7 ? [{ ...l7, volgendeStap: seed.volgendeStap, bijgewerkt: "2026-10-19" }] : null;
+    },
+  } as Migration,
 ];
