@@ -26,6 +26,10 @@ Next.js (App Router, TypeScript) op Vercel, data in Upstash Redis.
    De seed zet de beginwaarden (lijnen, to-do's, kosten, planning) alleen in collecties die nog leeg zijn.
    Bestaande data wordt nooit overschreven, dus je kunt hem veilig opnieuw draaien.
 
+   Daarna voert de seed eenmalige migraties uit (`lib/migrations.ts`) voor een database die al gevuld was,
+   zoals het invullen van de offerte van Hans van der Helm. Een migratie past alleen data aan die nog in de
+   oorspronkelijke vorm staat; wat je zelf in de site hebt gewijzigd, blijft staan.
+
 ## Lokaal ontwikkelen
 
 ```bash

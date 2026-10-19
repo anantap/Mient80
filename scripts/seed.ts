@@ -4,8 +4,9 @@
  */
 import { existsSync, readFileSync } from "node:fs";
 import { createRedis, KEY_PREFIX } from "../lib/redis";
+import { MIGRATIONS } from "../lib/migrations";
 import { SEED } from "../lib/seed";
-import type { CollectionName } from "../lib/types";
+import type { CollectionName, Collections } from "../lib/types";
 
 for (const file of [".env.local", ".env"]) {
   if (!existsSync(file)) continue;
@@ -31,6 +32,21 @@ async function main() {
     }
     await redis.set(key, SEED[name]);
     console.log(`✓ ${name}: ${SEED[name].length} items gezet`);
+  }
+
+  for (const m of MIGRATIONS) {
+    const doneKey = `${KEY_PREFIX}migratie:${m.id}`;
+    if (await redis.get(doneKey)) continue;
+    const key = KEY_PREFIX + m.collection;
+    const current = (await redis.get<Collections["kosten"]>(key)) ?? [];
+    const next = m.apply(current);
+    if (next) {
+      await redis.set(key, next);
+      console.log(`✓ migratie ${m.id} toegepast`);
+    } else {
+      console.log(`• migratie ${m.id}: niet nodig (al aangepast)`);
+    }
+    await redis.set(doneKey, new Date().toISOString());
   }
 }
 
