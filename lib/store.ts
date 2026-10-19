@@ -23,6 +23,7 @@ export function hasDatabase(): boolean {
 }
 
 const hashKey = (name: CollectionName) => `${KEY_PREFIX}v2:${name}`;
+const seededKey = (name: CollectionName) => `${KEY_PREFIX}seeded:${name}`;
 /** Oude opslag: één JSON-document per collectie */
 const legacyKey = (name: CollectionName) => KEY_PREFIX + name;
 
@@ -54,36 +55,32 @@ async function readEntries<K extends CollectionName>(redis: Redis, name: K): Pro
 
   // Eenmalig overzetten vanuit het oude JSON-document; dat blijft als back-up bewaard.
   const legacy = await redis.get<Item<K>[]>(legacyKey(name));
-  if (!Array.isArray(legacy) || legacy.length === 0) return {};
-  const entries = toEntries(legacy);
-  await redis.hset(hashKey(name), entries);
-  try {
-    await redis.rename(legacyKey(name), `${legacyKey(name)}:v1-backup`);
-  } catch {
-    // Een gelijktijdig verzoek heeft het al overgezet.
+  if (Array.isArray(legacy) && legacy.length > 0) {
+    const entries = toEntries(legacy);
+    await redis.hset(hashKey(name), entries);
+    await redis.set(seededKey(name), new Date().toISOString());
+    try {
+      await redis.rename(legacyKey(name), `${legacyKey(name)}:v1-backup`);
+    } catch {
+      // Een gelijktijdig verzoek heeft het al overgezet.
+    }
+    return entries;
   }
-  return entries;
+
+  // Nog nooit gevuld (nieuwe database): de beginwaarden zetten. Het merkteken zorgt dat een
+  // collectie die je zelf hebt leeggemaakt leeg blijft.
+  if ((await redis.set(seededKey(name), new Date().toISOString(), { nx: true })) === "OK") {
+    const entries = toEntries(SEED[name] as Item<K>[]);
+    if (SEED[name].length > 0) await redis.hset(hashKey(name), entries);
+    return entries;
+  }
+  return {};
 }
 
 export async function read<K extends CollectionName>(name: K): Promise<Collections[K]> {
   const redis = db();
   if (!redis) return structuredClone(memory()[name]);
   return sorted<K>(await readEntries(redis, name));
-}
-
-/** Of een collectie nog helemaal leeg is (ook in de oude opslag). */
-export async function isEmpty(name: CollectionName): Promise<boolean> {
-  return (await read(name)).length === 0;
-}
-
-/** Hele collectie neerzetten; alleen bedoeld voor de seed. */
-export async function seedCollection<K extends CollectionName>(name: K, items: Collections[K]): Promise<void> {
-  const redis = db();
-  if (!redis) {
-    memory()[name] = structuredClone(items);
-    return;
-  }
-  if (items.length > 0) await redis.hset(hashKey(name), toEntries(items as Item<K>[]));
 }
 
 export async function upsert<K extends CollectionName>(name: K, item: Item<K>): Promise<Collections[K]> {
@@ -112,5 +109,7 @@ export async function remove<K extends CollectionName>(name: K, id: string): Pro
   const entries = await readEntries(redis, name);
   await redis.hdel(hashKey(name), id);
   delete entries[id];
+  // Ook een collectie uit een oudere versie (zonder merkteken) mag na leegmaken leeg blijven.
+  if (Object.keys(entries).length === 0) await redis.set(seededKey(name), new Date().toISOString());
   return sorted<K>(entries);
 }

@@ -1,5 +1,5 @@
 /**
- * Zet de beginwaarden in Upstash Redis, maar alleen voor collecties die nog leeg zijn,
+ * Zet de beginwaarden in Upstash Redis, maar alleen voor collecties die nog nooit gevuld zijn,
  * en voert daarna eenmalige migraties uit (lib/migrations.ts).
  * Leest KV_REST_API_URL / KV_REST_API_TOKEN uit de omgeving of uit .env.local / .env.
  */
@@ -17,7 +17,7 @@ for (const file of [".env.local", ".env"]) {
 async function main() {
   // Pas na het laden van de env importeren: de store maakt de Redis-client lui aan.
   const { createRedis, KEY_PREFIX } = await import("../lib/redis");
-  const { hasDatabase, isEmpty, read, seedCollection, upsert } = await import("../lib/store");
+  const { hasDatabase, read, upsert } = await import("../lib/store");
   const { SEED } = await import("../lib/seed");
   const { MIGRATIONS } = await import("../lib/migrations");
 
@@ -27,13 +27,9 @@ async function main() {
   }
   const redis = createRedis()!;
 
+  // Lezen vult een collectie die nog nooit gevuld is met de beginwaarden (zie lib/store.ts).
   for (const name of Object.keys(SEED) as (keyof typeof SEED)[]) {
-    if (!(await isEmpty(name))) {
-      console.log(`• ${name}: al gevuld, overgeslagen`);
-      continue;
-    }
-    await seedCollection(name, SEED[name]);
-    console.log(`✓ ${name}: ${SEED[name].length} items gezet`);
+    console.log(`✓ ${name}: ${(await read(name)).length} items`);
   }
 
   for (const m of MIGRATIONS) {
