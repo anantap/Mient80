@@ -1,0 +1,50 @@
+# Mient 80
+
+Projectoverzicht voor de keukenverbouwing: status per lijn, to-do's, kosten en planning.
+Next.js (App Router, TypeScript) op Vercel, data in Upstash Redis.
+
+## Online zetten
+
+1. **Repo koppelen in Vercel**: Vercel → *Add New… → Project* → kies de GitHub-repo `Mient80` → *Deploy*.
+   Vercel herkent het framework zelf als Next.js; je hoeft geen build-instellingen aan te passen.
+2. **Upstash toevoegen via Storage**: open het project in Vercel → tab *Storage* → *Create Database* →
+   *Upstash for Redis* (Marketplace) → kies een regio (bijv. Frankfurt) → *Connect* aan het project.
+   Vercel zet dan zelf `KV_REST_API_URL` en `KV_REST_API_TOKEN` als environment variables.
+3. **(Optioneel) bewerkcode**: *Settings → Environment Variables* → `EDIT_CODE` = een code naar keuze.
+   Is die gezet, dan vraagt de site één keer per apparaat om de code voordat je iets kunt wijzigen
+   (onthouden in een cookie, een jaar geldig). Leeg of niet gezet = iedereen kan bewerken. Lezen is altijd open.
+4. **Redeploy**: *Deployments* → laatste deployment → *Redeploy*, zodat de nieuwe variabelen actief zijn.
+5. **Seed draaien** (lokaal, eenmalig):
+
+   ```bash
+   npm install
+   npx vercel link          # koppel deze map aan het Vercel-project
+   npx vercel env pull .env.local
+   npm run seed
+   ```
+
+   De seed zet de beginwaarden (lijnen, to-do's, kosten, planning) alleen in collecties die nog leeg zijn.
+   Bestaande data wordt nooit overschreven, dus je kunt hem veilig opnieuw draaien.
+
+## Lokaal ontwikkelen
+
+```bash
+npm install
+npm run dev     # http://localhost:3000
+```
+
+Zonder `KV_REST_API_URL`/`KV_REST_API_TOKEN` draait de app op een geheugenkopie van de seeddata
+(wijzigingen verdwijnen bij herstarten). Met `.env.local` uit `vercel env pull` werk je tegen de echte database.
+
+Overige scripts: `npm run build`, `npm run typecheck`.
+
+## Opbouw
+
+- `app/`: pagina's per tab (`/status`, `/todo`, `/kosten`, `/planning`) en `actions.ts` (server actions voor alle wijzigingen).
+- `components/`: UI per tab, zijbalk, bewerkslot (`EditProvider`).
+- `lib/`: types, seeddata, Redis-opslag, datum- en bedraghelpers, invoercontrole.
+- `scripts/seed.ts`: vult Redis met de beginwaarden.
+
+Data staat als één JSON-document per collectie onder de sleutels `mient80:lijnen`, `mient80:todos`,
+`mient80:kosten` en `mient80:planning`. Bedragen worden in centen opgeslagen. Het leenbedrag (€ 42.000)
+staat in `lib/types.ts` (`LENING`).
