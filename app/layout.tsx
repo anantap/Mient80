@@ -3,6 +3,7 @@ import { Archivo } from "next/font/google";
 import { Sidebar } from "@/components/Sidebar";
 import { EditProvider } from "@/components/EditProvider";
 import { canEdit, codeRequired } from "@/lib/auth";
+import { hasDatabase } from "@/lib/store";
 import "./globals.css";
 
 // Zelfde typografie als cpc2027: Archivo (breed, wdth 125) voor titels en getallen.
@@ -35,7 +36,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <EditProvider required={required} initiallyLocked={locked}>
           <div className="shell">
             <Sidebar />
-            <main className="content">{children}</main>
+            <main className="content">
+              {!hasDatabase() && (
+                <p className="db-warning" role="alert">
+                  Geen database gekoppeld: wijzigingen worden niet bewaard. Koppel Upstash via Storage in Vercel en
+                  doe een redeploy.
+                </p>
+              )}
+              {children}
+            </main>
           </div>
         </EditProvider>
       </body>

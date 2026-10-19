@@ -6,7 +6,7 @@ import { deleteItem, saveLijn } from "@/app/actions";
 import { addDays, fmtDate, mondayOf } from "@/lib/dates";
 import { newId } from "@/lib/format";
 import { STATUS_LABEL, STATUS_ORDER, type Lijn, type PlanItem, type Status, type Todo } from "@/lib/types";
-import { useCollection } from "./EditProvider";
+import { useCollection, useEdit } from "./EditProvider";
 import { Sheet } from "./Sheet";
 import { StatusCircles } from "./StatusCircles";
 import { DeleteButton, PageHeader, Pill, Segmented, Toggle, WeekNav } from "./ui";
@@ -30,6 +30,7 @@ export function StatusView({
   today: string;
 }) {
   const [lijnen, mutate] = useCollection(initial);
+  const { notify } = useEdit();
   const [filter, setFilter] = useState<Filter>("open");
   const [monday, setMonday] = useState(() => mondayOf(today));
   const [editing, setEditing] = useState<Lijn | null>(null);
@@ -43,7 +44,11 @@ export function StatusView({
     mutate(
       () => saveLijn({ ...updated }),
       (prev) => prev.map((x) => (x.id === l.id ? updated : x)),
-    );
+    ).then((ok) => {
+      if (ok && updated.status === "klaar" && filter === "open") {
+        notify(`"${l.onderwerp}" staat op Klaar; je ziet hem onder Alles.`);
+      }
+    });
   }
 
   function shiftWeek(n: number) {

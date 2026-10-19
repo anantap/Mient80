@@ -49,6 +49,10 @@ Overige scripts: `npm run build`, `npm run typecheck`.
 - `lib/`: types, seeddata, Redis-opslag, datum- en bedraghelpers, invoercontrole.
 - `scripts/seed.ts`: vult Redis met de beginwaarden.
 
-Data staat als één JSON-document per collectie onder de sleutels `mient80:lijnen`, `mient80:todos`,
-`mient80:kosten` en `mient80:planning`. Bedragen worden in centen opgeslagen. Het leenbedrag (€ 42.000)
-staat in `lib/types.ts` (`LENING`).
+Data staat per collectie in een Redis-hash (`mient80:v2:lijnen`, `mient80:v2:todos`, `mient80:v2:kosten`,
+`mient80:v2:planning`), met elk item als eigen veld. Zo kunnen twee wijzigingen kort na elkaar elkaar niet
+overschrijven. Data uit de eerdere opslag (één JSON-document per collectie onder `mient80:<collectie>`) wordt
+bij de eerste keer lezen automatisch overgezet; het oude document blijft als `mient80:<collectie>:v1-backup` bewaard.
+Bedragen worden in centen opgeslagen. Het leenbedrag (€ 42.000) staat in `lib/types.ts` (`LENING`).
+
+Is er geen database gekoppeld, dan toont de site bovenaan een waarschuwing dat wijzigingen niet worden bewaard.

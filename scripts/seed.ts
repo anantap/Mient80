@@ -1,12 +1,9 @@
 /**
- * Zet de beginwaarden in Upstash Redis, maar alleen voor collecties die nog leeg zijn.
+ * Zet de beginwaarden in Upstash Redis, maar alleen voor collecties die nog leeg zijn,
+ * en voert daarna eenmalige migraties uit (lib/migrations.ts).
  * Leest KV_REST_API_URL / KV_REST_API_TOKEN uit de omgeving of uit .env.local / .env.
  */
 import { existsSync, readFileSync } from "node:fs";
-import { createRedis, KEY_PREFIX } from "../lib/redis";
-import { MIGRATIONS } from "../lib/migrations";
-import { SEED } from "../lib/seed";
-import type { CollectionName, Collections } from "../lib/types";
 
 for (const file of [".env.local", ".env"]) {
   if (!existsSync(file)) continue;
@@ -18,34 +15,33 @@ for (const file of [".env.local", ".env"]) {
 }
 
 async function main() {
-  const redis = createRedis();
-  if (!redis) {
+  // Pas na het laden van de env importeren: de store maakt de Redis-client lui aan.
+  const { createRedis, KEY_PREFIX } = await import("../lib/redis");
+  const { hasDatabase, isEmpty, read, seedCollection, upsert } = await import("../lib/store");
+  const { SEED } = await import("../lib/seed");
+  const { MIGRATIONS } = await import("../lib/migrations");
+
+  if (!hasDatabase()) {
     console.error("KV_REST_API_URL en KV_REST_API_TOKEN ontbreken. Draai eerst `vercel env pull .env.local`.");
     process.exit(1);
   }
-  for (const name of Object.keys(SEED) as CollectionName[]) {
-    const key = KEY_PREFIX + name;
-    const current = await redis.get<unknown[]>(key);
-    if (Array.isArray(current) && current.length > 0) {
-      console.log(`• ${name}: al gevuld (${current.length} items), overgeslagen`);
+  const redis = createRedis()!;
+
+  for (const name of Object.keys(SEED) as (keyof typeof SEED)[]) {
+    if (!(await isEmpty(name))) {
+      console.log(`• ${name}: al gevuld, overgeslagen`);
       continue;
     }
-    await redis.set(key, SEED[name]);
+    await seedCollection(name, SEED[name]);
     console.log(`✓ ${name}: ${SEED[name].length} items gezet`);
   }
 
   for (const m of MIGRATIONS) {
     const doneKey = `${KEY_PREFIX}migratie:${m.id}`;
     if (await redis.get(doneKey)) continue;
-    const key = KEY_PREFIX + m.collection;
-    const current = (await redis.get<Collections["kosten"]>(key)) ?? [];
-    const next = m.apply(current);
-    if (next) {
-      await redis.set(key, next);
-      console.log(`✓ migratie ${m.id} toegepast`);
-    } else {
-      console.log(`• migratie ${m.id}: niet nodig (al aangepast)`);
-    }
+    const items = m.apply(await read(m.collection));
+    for (const item of items ?? []) await upsert(m.collection, item);
+    console.log(items ? `✓ migratie ${m.id} toegepast` : `• migratie ${m.id}: niet nodig`);
     await redis.set(doneKey, new Date().toISOString());
   }
 }

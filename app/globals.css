@@ -267,6 +267,17 @@ a {
   max-width: calc(1240px + var(--sidebar-w));
 }
 
+.db-warning {
+  margin: 0 0 20px;
+  padding: 10px 14px;
+  border: 1px dashed var(--danger);
+  border-radius: var(--radius-sm);
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
 /* ───────────── Paginakop ───────────── */
 .page-head {
   display: flex;
