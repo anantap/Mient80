@@ -30,7 +30,7 @@ export function Sheet({
     <div className="sheet-backdrop" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
       <div className="sheet" role="dialog" aria-modal="true" aria-label={title}>
         <div className="sheet-head">
-          <h2 className="serif">{title}</h2>
+          <h2 className="display">{title}</h2>
           <button type="button" className="icon-btn" onClick={onClose} aria-label="Sluiten">
             <X size={18} />
           </button>

@@ -66,13 +66,13 @@ export function StatusView({
       </PageHeader>
 
       <section className="panel">
-        <h2 className="panel-title serif">Hoe staan we ervoor?</h2>
+        <h2 className="panel-title display">Hoe staan we ervoor?</h2>
         <StatusCircles lijnen={lijnen} />
       </section>
 
       <section className="panel">
         <div className="panel-bar">
-          <h2 className="panel-title serif">Lijnen</h2>
+          <h2 className="panel-title display">Lijnen</h2>
           <Segmented<Filter>
             label="Filter"
             value={filter}
@@ -103,7 +103,7 @@ export function StatusView({
                     <Pencil size={16} />
                   </button>
                 </div>
-                <h3 className="card-title serif">{l.onderwerp}</h3>
+                <h3 className="card-title display">{l.onderwerp}</h3>
                 {l.wie && (
                   <p className="card-who">
                     <User size={14} /> {l.wie}
@@ -124,7 +124,7 @@ export function StatusView({
       </section>
 
       <section className="panel">
-        <h2 className="panel-title serif">Wie is waarmee bezig?</h2>
+        <h2 className="panel-title display">Wie is waarmee bezig?</h2>
         <WeekGrid monday={monday} today={today} planning={planning} todos={todos} />
       </section>
 

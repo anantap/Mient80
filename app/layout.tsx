@@ -1,12 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Newsreader } from "next/font/google";
+import { Archivo } from "next/font/google";
 import { Sidebar } from "@/components/Sidebar";
 import { EditProvider } from "@/components/EditProvider";
 import { canEdit, codeRequired } from "@/lib/auth";
 import "./globals.css";
 
-const sans = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
-const serif = Newsreader({ subsets: ["latin"], variable: "--font-serif", display: "swap", style: ["normal", "italic"] });
+// Zelfde typografie als cpc2027: Archivo (breed, wdth 125) voor titels en getallen.
+const display = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-display", display: "swap" });
 
 export const metadata: Metadata = {
   title: { default: "Mient 80", template: "%s · Mient 80" },
@@ -18,19 +18,16 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f4f2ee" },
-    { media: "(prefers-color-scheme: dark)", color: "#161514" },
-  ],
+  themeColor: "#0f0f0f",
 };
 
-const themeScript = `try{var t=localStorage.getItem("mient80-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
+const themeScript = `try{var t=localStorage.getItem("mient80-theme");if(t==="light")document.documentElement.dataset.theme=t}catch(e){}`;
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const required = codeRequired();
   const locked = required && !(await canEdit());
   return (
-    <html lang="nl" className={`${sans.variable} ${serif.variable}`} suppressHydrationWarning>
+    <html lang="nl" className={display.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

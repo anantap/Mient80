@@ -72,7 +72,7 @@ export function PlanningView({ initial, today }: { initial: PlanItem[]; today: s
 
       <section className="panel">
         <div className="panel-bar">
-          <h2 className="panel-title serif">Tijdlijn</h2>
+          <h2 className="panel-title display">Tijdlijn</h2>
           <ul className="legend">
             <li><span className="lg lg-period" /> Periode</li>
             <li><span className="lg lg-critical" /> Kritiek pad</li>

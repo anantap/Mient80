@@ -20,17 +20,16 @@ export function Sidebar() {
   const [dark, setDark] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const explicit = document.documentElement.dataset.theme;
-    setDark(explicit ? explicit === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches);
+    setDark(document.documentElement.dataset.theme !== "light");
   }, []);
 
   function toggleTheme() {
     const next = !dark;
     setDark(next);
-    const theme = next ? "dark" : "light";
-    document.documentElement.dataset.theme = theme;
+    if (next) delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = "light";
     try {
-      localStorage.setItem("mient80-theme", theme);
+      localStorage.setItem("mient80-theme", next ? "dark" : "light");
     } catch {}
   }
 

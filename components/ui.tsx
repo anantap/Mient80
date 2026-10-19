@@ -7,7 +7,10 @@ import { fmtWeekRange, isoWeek } from "@/lib/dates";
 export function PageHeader({ title, children }: { title: string; children?: React.ReactNode }) {
   return (
     <header className="page-head">
-      <h1 className="serif">{title}</h1>
+      <div>
+        <div className="eyebrow">Mient 80 · keuken</div>
+        <h1 className="display">{title}</h1>
+      </div>
       {children && <div className="page-head-actions">{children}</div>}
     </header>
   );

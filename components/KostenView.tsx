@@ -54,7 +54,7 @@ export function KostenView({ initial }: { initial: Kost[] }) {
         return (
           <section key={cat} className="panel">
             <div className="panel-bar">
-              <h2 className="panel-title serif">{cat}</h2>
+              <h2 className="panel-title display">{cat}</h2>
               <div className="cat-total">
                 <span className="num">{sub ? fmtEuro(sub) : "nog onbekend"}</span>
                 {subBetaald > 0 && <span className="muted num">{fmtEuro(subBetaald)} betaald</span>}

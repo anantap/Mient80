@@ -103,7 +103,7 @@ export function TodoView({ initial, lijnen, today }: { initial: Todo[]; lijnen: 
           </button>
         </form>
 
-        <h2 className="panel-title serif">
+        <h2 className="panel-title display">
           Te doen <span className="count">{open.length}</span>
         </h2>
         {open.length === 0 ? <p className="empty">Alles is afgevinkt.</p> : <ul className="todos">{open.map(row)}</ul>}
