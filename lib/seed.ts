@@ -115,6 +115,15 @@ export const SEED: Collections = {
       lijnId: "l7",
       afgevinkt: "2026-10-19",
     },
+    {
+      id: "t8",
+      titel: "Maten nieuwe deur opmeten en langs Mammoet bouwmaterialen",
+      klaar: false,
+      deadline: null,
+      notitie: "Eerst de maten van de nieuwe deur opmeten, daarna met die maten langs Mammoet bouwmaterialen.",
+      lijnId: null,
+      afgevinkt: null,
+    },
   ],
   kosten: [
     {

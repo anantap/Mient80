@@ -70,4 +70,9 @@ export const MIGRATIONS: Migration[] = [
       return l7 ? [{ ...l7, volgendeStap: seed.volgendeStap, bijgewerkt: "2026-10-19" }] : null;
     },
   } as Migration,
+  {
+    id: "2026-10-todo-deur-mammoet",
+    collection: "todos",
+    apply: (items) => ((items as Collections["todos"]).some((t) => t.id === "t8") ? null : seedItems("todos", ["t8"])),
+  } as Migration,
 ];
