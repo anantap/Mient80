@@ -90,4 +90,23 @@ export const MIGRATIONS: Migration[] = [
       return update.length ? update : null;
     },
   } as Migration,
+  {
+    id: "2026-10-hvdh-titels",
+    collection: "kosten",
+    apply: (items) => {
+      const seed = seedItems("kosten", ["k5", "k6"]);
+      const update = (items as Collections["kosten"])
+        .filter((k) => (k.id === "k5" || k.id === "k6") && k.leverancier === "Hans van der Helm keukens")
+        .map((k) => {
+          const nieuw = seed.find((x) => x.id === k.id)!;
+          const prefix = k.id === "k5" ? "Werkblad: " : "Apparatuur: ";
+          return {
+            ...k,
+            leverancier: nieuw.leverancier,
+            omschrijving: k.omschrijving.startsWith(prefix) ? k.omschrijving.slice(prefix.length) : k.omschrijving,
+          };
+        });
+      return update.length ? update : null;
+    },
+  } as Migration,
 ];
