@@ -75,4 +75,19 @@ export const MIGRATIONS: Migration[] = [
     collection: "todos",
     apply: (items) => ((items as Collections["todos"]).some((t) => t.id === "t8") ? null : seedItems("todos", ["t8"])),
   } as Migration,
+  {
+    id: "2026-10-hvdh-werkblad-apparatuur-namen",
+    collection: "kosten",
+    apply: (items) => {
+      const oud: Record<string, string> = {
+        k5: "Offerte W202600798: Arte composiet werkblad Bologna 2× 206 cm, uitsparingen, RVS vlakinbouwspoelbak, tegelplint (excl. montage, geldig t/m 8 jan 2027)",
+        k6: "Offerte W202600798: AEG vaatwasser, koel-vriescombinatie, combi-oven Pro Black, inductiekookplaat met afzuiging + koolstoffilter, Franke kraan (excl. montage)",
+      };
+      const seed = seedItems("kosten", ["k5", "k6"]);
+      const update = (items as Collections["kosten"])
+        .filter((k) => oud[k.id] === k.omschrijving)
+        .map((k) => ({ ...k, omschrijving: seed.find((x) => x.id === k.id)!.omschrijving }));
+      return update.length ? update : null;
+    },
+  } as Migration,
 ];

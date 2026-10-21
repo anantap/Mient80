@@ -168,7 +168,7 @@ export const SEED: Collections = {
       categorie: "Werkblad & apparatuur",
       leverancier: "Hans van der Helm keukens",
       omschrijving:
-        "Offerte W202600798: Arte composiet werkblad Bologna 2× 206 cm, uitsparingen, RVS vlakinbouwspoelbak, tegelplint (excl. montage, geldig t/m 8 jan 2027)",
+        "Werkblad: Arte composiet Bologna 2× 206 cm, uitsparingen, RVS vlakinbouwspoelbak, tegelplint (offerte W202600798, excl. montage, geldig t/m 8 jan 2027)",
       bedrag: 426_760,
       status: "offerte",
       betaald: 0,
@@ -178,7 +178,7 @@ export const SEED: Collections = {
       categorie: "Werkblad & apparatuur",
       leverancier: "Hans van der Helm keukens",
       omschrijving:
-        "Offerte W202600798: AEG vaatwasser, koel-vriescombinatie, combi-oven Pro Black, inductiekookplaat met afzuiging + koolstoffilter, Franke kraan (excl. montage)",
+        "Apparatuur: AEG vaatwasser, koel-vriescombinatie, combi-oven Pro Black, inductiekookplaat met afzuiging + koolstoffilter, Franke kraan (offerte W202600798, excl. montage)",
       bedrag: 570_760,
       status: "offerte",
       betaald: 0,
