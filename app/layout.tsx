@@ -12,7 +12,7 @@ const display = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-
 export const metadata: Metadata = {
   title: { default: "Mient 80", template: "%s · Mient 80" },
   description: "Projectoverzicht keukenverbouwing Mient 80",
-  appleWebApp: { title: "Mient 80", capable: true, statusBarStyle: "default" },
+  appleWebApp: { title: "Mient 80", capable: true, statusBarStyle: "black" },
 };
 
 export const viewport: Viewport = {
