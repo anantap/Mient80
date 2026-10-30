@@ -125,4 +125,12 @@ export const MIGRATIONS: Migration[] = [
       return update.length ? update : null;
     },
   } as Migration,
+  {
+    id: "2026-10-showroom-hvdh-klaar",
+    collection: "planning",
+    apply: (items) => {
+      const p10 = (items as Collections["planning"]).find((i) => i.id === "p10" && !i.klaar);
+      return p10 ? [{ ...p10, klaar: true }] : null;
+    },
+  } as Migration,
 ];
