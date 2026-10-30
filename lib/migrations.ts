@@ -109,4 +109,20 @@ export const MIGRATIONS: Migration[] = [
       return update.length ? update : null;
     },
   } as Migration,
+  {
+    id: "2026-10-hvdh-offerte-w202600804-rev2",
+    collection: "kosten",
+    apply: (items) => {
+      // Alleen posten die nog op de bedragen van W202600798 staan.
+      const oudBedrag: Record<string, number> = { k5: 426_760, k6: 570_760 };
+      const seed = seedItems("kosten", ["k5", "k6"]);
+      const update = (items as Collections["kosten"])
+        .filter((k) => oudBedrag[k.id] === k.bedrag)
+        .map((k) => {
+          const nieuw = seed.find((x) => x.id === k.id)!;
+          return { ...k, bedrag: nieuw.bedrag, omschrijving: nieuw.omschrijving };
+        });
+      return update.length ? update : null;
+    },
+  } as Migration,
 ];
