@@ -133,4 +133,60 @@ export const MIGRATIONS: Migration[] = [
       return p10 ? [{ ...p10, klaar: true }] : null;
     },
   } as Migration,
+  {
+    id: "2026-11-mail-lijnen",
+    collection: "lijnen",
+    apply: (items) => {
+      // Alleen lijnen waarvan de volgende stap nog de oorspronkelijke tekst is.
+      const oud: Record<string, string> = {
+        l1: "Definitief ontwerp + offerte 2026-1745 binnen (19 okt). Checken en accepteren vóór 18 nov",
+        l5: "Langs in de showroom voor een goedkopere oven + kookplaat die bij elkaar passen (recirculatie, 80 cm). Werkbladdikte ≥ 28 mm en adapt-r-beugels checken",
+        l6: "Afspraken over uitbetalen, wat wel/niet mag en geld dat overblijft",
+      };
+      const seed = seedItems("lijnen", ["l1", "l5", "l6"]);
+      const update = (items as Collections["lijnen"])
+        .filter((l) => oud[l.id] === l.volgendeStap)
+        .map((l) => {
+          const nieuw = seed.find((x) => x.id === l.id)!;
+          return { ...l, volgendeStap: nieuw.volgendeStap, status: l.id === "l6" ? "klaar" : l.status, bijgewerkt: "2026-11-04" } as typeof l;
+        });
+      return update.length ? update : null;
+    },
+  } as Migration,
+  {
+    id: "2026-11-mail-kosten",
+    collection: "kosten",
+    apply: (items) => {
+      const seed = seedItems("kosten", ["k2", "k5", "k6"]);
+      const update = (items as Collections["kosten"]).flatMap((k) => {
+        const nieuw = seed.find((x) => x.id === k.id);
+        if (!nieuw) return [];
+        if (k.id === "k2" && k.status === "offerte" && k.betaald === 0) {
+          return [{ ...k, status: "betaald", betaald: k.bedrag, omschrijving: nieuw.omschrijving } as typeof k];
+        }
+        if ((k.id === "k5" || k.id === "k6") && k.status === "offerte") return [{ ...k, status: "geaccepteerd" } as typeof k];
+        return [];
+      });
+      return update.length ? update : null;
+    },
+  } as Migration,
+  {
+    id: "2026-11-mail-planning",
+    collection: "planning",
+    apply: (items) => {
+      const update = (items as Collections["planning"])
+        .filter((i) => (i.id === "p3" || i.id === "p4") && !i.klaar)
+        .map((i) => ({ ...i, klaar: true }));
+      return update.length ? update : null;
+    },
+  } as Migration,
+  {
+    id: "2026-11-mail-todos",
+    collection: "todos",
+    apply: (items) => {
+      const ids = new Set((items as Collections["todos"]).map((t) => t.id));
+      const nieuw = seedItems("todos", ["t9", "t10"]).filter((t) => !ids.has(t.id));
+      return nieuw.length ? nieuw : null;
+    },
+  } as Migration,
 ];

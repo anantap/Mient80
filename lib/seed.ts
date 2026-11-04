@@ -10,7 +10,7 @@ export const SEED: Collections = {
       status: "loopt",
       kritiek: true,
       volgendeStap:
-        "Definitief ontwerp + offerte 2026-1745 binnen (19 okt). Checken en accepteren vóór 18 nov",
+        "Offerte 2026-1745 geaccepteerd en betaald uit het bouwdepot. Leverdatum afwachten (volgt ca. 4 weken na betaling) en het vaatwasserfront (80 cm) oplossen",
       notitie: "",
       bijgewerkt: "2026-10-19",
     },
@@ -54,7 +54,7 @@ export const SEED: Collections = {
       status: "loopt",
       kritiek: false,
       volgendeStap:
-        "Langs in de showroom voor een goedkopere oven + kookplaat die bij elkaar passen (recirculatie, 80 cm). Werkbladdikte ≥ 28 mm en adapt-r-beugels checken",
+        "Akkoord gegeven op W202600804. Eerst de vaatwasser oplossen (front max. 77,6 cm, Baboon-front is 80 cm), dan de offerte ondertekenen en terugsturen; daarna volgt de factuur voor 25% aanbetaling",
       notitie: "",
       bijgewerkt: "2026-10-19",
     },
@@ -62,9 +62,9 @@ export const SEED: Collections = {
       id: "l6",
       onderwerp: "Bouwdepot",
       wie: "Paul (financieel adviseur)",
-      status: "loopt",
+      status: "klaar",
       kritiek: false,
-      volgendeStap: "Afspraken over uitbetalen, wat wel/niet mag en geld dat overblijft",
+      volgendeStap: "Hypotheekverhoging geregeld (2 nov). Facturen indienen bij het NN-bouwdepot; wat overblijft wordt afgelost",
       notitie: "",
       bijgewerkt: "2026-10-19",
     },
@@ -125,6 +125,24 @@ export const SEED: Collections = {
       lijnId: null,
       afgevinkt: null,
     },
+    {
+      id: "t9",
+      titel: "Vaatwasser oplossen: Baboon-front is 80 cm, vaatwasser vraagt max. 77,6 cm",
+      klaar: false,
+      deadline: null,
+      notitie: "Opties: een andere vaatwasser via Yrsha (een die een front van 80 cm aankan, bijv. met sleepdeur), of een lager front via Lindy. Lindy wil maten checken op typenummer.",
+      lijnId: "l5",
+      afgevinkt: null,
+    },
+    {
+      id: "t10",
+      titel: "Offerte W202600804 ondertekenen en terugsturen naar Yrsha",
+      klaar: false,
+      deadline: null,
+      notitie: "Printen, tekenen, scannen en mailen. Daarna volgt de factuur voor 25% aanbetaling (indienen bij het bouwdepot). Eerst de vaatwasser oplossen.",
+      lijnId: "l5",
+      afgevinkt: null,
+    },
   ],
   kosten: [
     {
@@ -141,10 +159,10 @@ export const SEED: Collections = {
       categorie: "Fronten & kasten",
       leverancier: "Baboon Amsterdam",
       omschrijving:
-        "Offerte 2026-1745: Melatop Butter, Pull-grepen, incl. € 145 bezorging (na aftrek aanbetaling)",
+        "Offerte 2026-1745: Melatop Butter, Pull-grepen, incl. € 145 bezorging (na aftrek aanbetaling). Factuur 2026-1042 betaald uit het bouwdepot (2 nov)",
       bedrag: 449_600,
-      status: "offerte",
-      betaald: 0,
+      status: "betaald",
+      betaald: 449_600,
     },
     {
       id: "k3",
@@ -171,7 +189,7 @@ export const SEED: Collections = {
       omschrijving:
         "Arte composiet Bologna 2× 206 cm, uitsparingen kookplaat en kraan (opbouw) en spoelbak (vlakinbouw), RVS vlakinbouwspoelbak, tegelplint (offerte W202600804 rev. 2, excl. montage, geldig t/m 8 jan 2027)",
       bedrag: 426_800,
-      status: "offerte",
+      status: "geaccepteerd",
       betaald: 0,
     },
     {
@@ -181,15 +199,15 @@ export const SEED: Collections = {
       omschrijving:
         "Electrolux combi-oven Pure Black, inductiekookplaat met afzuiging + OdourClean Plus filter, vaatwasser (14 couverts), koel-vriescombinatie NoFrost; Franke kraan (offerte W202600804 rev. 2, excl. montage)",
       bedrag: 477_500,
-      status: "offerte",
+      status: "geaccepteerd",
       betaald: 0,
     },
   ],
   planning: [
     { id: "p1", titel: "Inmeten door Baas klus", type: "mijlpaal", start: "2026-09-28", eind: null, partij: "baasklus", klaar: true, kritiek: false, onzeker: false, notitie: "" },
     { id: "p2", titel: "Taxatie Stokman Van Duren", type: "mijlpaal", start: "2026-09-29", eind: null, partij: "wij", klaar: true, kritiek: false, onzeker: false, notitie: "" },
-    { id: "p3", titel: "Definitief ontwerp + offerte Baboon ontvangen", type: "mijlpaal", start: "2026-10-19", eind: null, partij: "baboon", klaar: false, kritiek: false, onzeker: false, notitie: "" },
-    { id: "p4", titel: "Offerte Baboon verloopt", type: "deadline", start: "2026-11-18", eind: null, partij: "baboon", klaar: false, kritiek: true, onzeker: false, notitie: "" },
+    { id: "p3", titel: "Definitief ontwerp + offerte Baboon ontvangen", type: "mijlpaal", start: "2026-10-19", eind: null, partij: "baboon", klaar: true, kritiek: false, onzeker: false, notitie: "" },
+    { id: "p4", titel: "Offerte Baboon verloopt", type: "deadline", start: "2026-11-18", eind: null, partij: "baboon", klaar: true, kritiek: true, onzeker: false, notitie: "" },
     { id: "p5", titel: "Maatvoering naar Multimar", type: "periode", start: "2026-10-01", eind: "2026-11-30", partij: "multimar", klaar: false, kritiek: true, onzeker: false, notitie: "Baas klus rekent waterpunten opnieuw; daarna coördinaten naar Marco" },
     { id: "p6", titel: "Start Multimar", type: "periode", start: "2027-01-04", eind: "2027-01-15", partij: "multimar", klaar: false, kritiek: true, onzeker: false, notitie: "Start 4 januari 2027 bevestigd (week 1–2)" },
     { id: "p7", titel: "Levering Baboon", type: "periode", start: "2027-01-18", eind: "2027-01-22", partij: "baboon", klaar: false, kritiek: true, onzeker: false, notitie: "Week 3" },
