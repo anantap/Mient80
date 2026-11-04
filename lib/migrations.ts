@@ -189,4 +189,13 @@ export const MIGRATIONS: Migration[] = [
       return nieuw.length ? nieuw : null;
     },
   } as Migration,
+  {
+    id: "2026-11-mail-baasklus",
+    collection: "mails",
+    apply: (items) => {
+      const m36 = (items as Collections["mails"]).find((m) => m.id === "m36" && m.van === "Reveal Works");
+      const nieuw = seedItems("mails", ["m36"])[0];
+      return m36 ? [{ ...m36, van: nieuw.van, samenvatting: nieuw.samenvatting }] : null;
+    },
+  } as Migration,
 ];
