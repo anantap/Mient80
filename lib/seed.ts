@@ -44,7 +44,7 @@ export const SEED: Collections = {
       kritiek: true,
       volgendeStap:
         "Start begin januari 2027, wacht op maatvoering. Stucwerk bij de knik dun houden",
-      notitie: "",
+      notitie: "Eisen van Baas klus voor de montage: geen leidingwerk op de muur (er is geen ruimte achter de kasten), stopcontacten voor de apparatuur bij voorkeur los op de grond, stucwerk droog, vlak en haaks.",
       bijgewerkt: "2026-10-19",
     },
     {
@@ -143,6 +143,15 @@ export const SEED: Collections = {
       lijnId: "l5",
       afgevinkt: null,
     },
+    {
+      id: "t11",
+      titel: "IKEA-bestelling compleet maken vóór de montage",
+      klaar: false,
+      deadline: null,
+      notitie: "Met de tekening van Baboon naar IKEA. Volgens Baas klus: scharnieren apart bestellen (gaan niet automatisch mee) en de Vaglig-rails voor de vaatwasser (art.nr. 005.181.92). Geen poten of frame van IKEA nodig, hij gebruikt eigen poten. Fronten en panelen na levering plat op de grond leggen.",
+      lijnId: "l3",
+      afgevinkt: null,
+    },
   ],
   kosten: [
     {
@@ -177,8 +186,9 @@ export const SEED: Collections = {
       id: "k4",
       categorie: "Montage",
       leverancier: "Baas klus",
-      omschrijving: "Offerte 2026-0048-1: inmeten, plaatsen 2 dagen, vervoer. Termijnen 50/30/20 %",
-      bedrag: 307_824,
+      omschrijving:
+        "Calculatie keukenmontage: starttarief (reiskosten, materialen), 11 kasten, 14 lades, 24 poten, 1 Metod-kast op maat, 4× niet-IKEA-apparatuur passend maken. Meerwerk en materialen nog € 0; parkeerkosten apart",
+      bedrag: 269_650,
       status: "offerte",
       betaald: 0,
     },

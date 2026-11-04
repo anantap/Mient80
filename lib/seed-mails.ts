@@ -224,9 +224,9 @@ export const SEED_MAILS: Mail[] = [
 
   // ── Montage ──
   {
-    id: "m36", datum: "2026-09-07", van: "Baas klus", partij: "baasklus", richting: "in",
-    onderwerp: "Offerte montage 2026-0048-1",
-    samenvatting: "Offerte 2026-0048-1 van Baas klus voor inmeten, plaatsen (2 dagen) en vervoer; termijnen 50/30/20 %. De mail kwam binnen onder de naam Reveal Works.",
+    id: "m36", datum: "2026-09-07", van: "Reveal Works", partij: "overig", richting: "in",
+    onderwerp: "Offerte montage 2026-0048-1 (vervallen)",
+    samenvatting: "Offerte van Reveal Works voor inmeten, plaatsen (2 dagen) en vervoer, € 3.078,24. Reveal Works doet niets meer; de montage gaat via Baas klus.",
     lijnId: "l3", belangrijk: false, threadId: "1a07c02850ca5182",
   },
 ];

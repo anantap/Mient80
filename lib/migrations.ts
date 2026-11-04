@@ -198,4 +198,37 @@ export const MIGRATIONS: Migration[] = [
       return m36 ? [{ ...m36, van: nieuw.van, samenvatting: nieuw.samenvatting }] : null;
     },
   } as Migration,
+  {
+    id: "2026-11-baasklus-calculatie",
+    collection: "kosten",
+    apply: (items) => {
+      // Alleen als de post nog op de (vervallen) offerte van Reveal Works staat.
+      const k4 = (items as Collections["kosten"]).find((k) => k.id === "k4" && k.bedrag === 307_824);
+      const nieuw = seedItems("kosten", ["k4"])[0];
+      return k4 ? [{ ...k4, leverancier: "Baas klus", omschrijving: nieuw.omschrijving, bedrag: nieuw.bedrag }] : null;
+    },
+  } as Migration,
+  {
+    id: "2026-11-mail-revealworks",
+    collection: "mails",
+    apply: (items) => {
+      const m36 = (items as Collections["mails"]).find(
+        (m) => m.id === "m36" && (m.van === "Baas klus" || m.van === "Reveal Works") && !m.onderwerp.includes("vervallen"),
+      );
+      return m36 ? seedItems("mails", ["m36"]) : null;
+    },
+  } as Migration,
+  {
+    id: "2026-11-baasklus-eisen",
+    collection: "lijnen",
+    apply: (items) => {
+      const l4 = (items as Collections["lijnen"]).find((l) => l.id === "l4" && l.notitie === "");
+      return l4 ? [{ ...l4, notitie: "Eisen van Baas klus voor de montage: geen leidingwerk op de muur (er is geen ruimte achter de kasten), stopcontacten voor de apparatuur bij voorkeur los op de grond, stucwerk droog, vlak en haaks." }] : null;
+    },
+  } as Migration,
+  {
+    id: "2026-11-todo-ikea-bestelling",
+    collection: "todos",
+    apply: (items) => ((items as Collections["todos"]).some((t) => t.id === "t11") ? null : seedItems("todos", ["t11"])),
+  } as Migration,
 ];
