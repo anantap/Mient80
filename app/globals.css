@@ -1075,6 +1075,10 @@ a {
   --party: var(--p-wij);
   --party-ink: var(--p-wij-ink);
 }
+.party-financiering {
+  --party: var(--geaccepteerd-bg);
+  --party-ink: var(--geaccepteerd-dot);
+}
 .party-overig {
   --party: var(--p-overig);
   --party-ink: var(--p-overig-ink);
@@ -1723,6 +1727,189 @@ a {
   color: var(--text-dim);
 }
 
+/* ───────────── Mail ───────────── */
+.mail-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+.party-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.party-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  padding: 0 11px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dim);
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.party-chip svg {
+  color: var(--party-ink);
+}
+.party-chip:hover {
+  color: var(--text);
+}
+.party-chip.active {
+  background: var(--party);
+  border-color: var(--party-ink);
+  color: var(--text);
+}
+.mail-month + .mail-month {
+  margin-top: 24px;
+}
+.mail-month-title {
+  font-family: var(--font-wide);
+  font-stretch: 125%;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  margin-bottom: 10px;
+}
+.mail-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mail {
+  position: relative;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 14px;
+  padding: 0 0 10px 22px;
+}
+.mail::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--line);
+}
+.mail:last-child::before {
+  bottom: auto;
+  height: 22px;
+}
+.mail-dot {
+  position: absolute;
+  left: 0;
+  top: 16px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--party-ink);
+  border: 2px solid var(--bg-alt);
+}
+.mail.is-important .mail-dot {
+  box-shadow: 0 0 0 2px var(--geblokkeerd-dot);
+}
+.mail-date {
+  padding-top: 13px;
+  font-family: var(--font-wide);
+  font-stretch: 125%;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.mail-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.mail.is-important .mail-card {
+  border-left: 3px solid var(--geblokkeerd-dot);
+}
+.mail-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+.mail-who {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+.avatar-sm {
+  width: 22px;
+  height: 22px;
+  margin-right: 7px;
+  font-size: 8.5px;
+}
+.mail-dir {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.mail-edit {
+  margin-left: auto;
+  width: 28px;
+  height: 28px;
+}
+.mail-subject {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.mail-summary {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+.mail-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  margin-top: 2px;
+}
+.mail-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-text);
+}
+.mail-link:hover {
+  color: var(--text);
+}
+@media (max-width: 600px) {
+  .mail {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  .mail-date {
+    padding-top: 10px;
+  }
+}
+
 /* ───────────── Formulieren & sheet ───────────── */
 .sheet-backdrop {
   position: fixed;
@@ -1972,12 +2159,12 @@ textarea:focus {
     justify-content: space-around;
   }
   .tab {
-    width: 62px;
+    width: 56px;
     height: 52px;
     align-content: center;
   }
   .sidebar-foot .tab {
-    width: 44px;
+    width: 38px;
   }
   .tab-label {
     display: block;

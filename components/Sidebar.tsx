@@ -1,6 +1,6 @@
 "use client";
 
-import { Activity, CalendarRange, ListChecks, Lock, LockOpen, Moon, Sun, Wallet } from "lucide-react";
+import { Activity, CalendarRange, ListChecks, Lock, LockOpen, Mail, Moon, Sun, Wallet } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -12,6 +12,7 @@ const TABS = [
   { href: "/todo", label: "To-do", icon: ListChecks },
   { href: "/kosten", label: "Kosten", icon: Wallet },
   { href: "/planning", label: "Planning", icon: CalendarRange },
+  { href: "/mail", label: "Mail", icon: Mail },
 ];
 
 export function Sidebar() {

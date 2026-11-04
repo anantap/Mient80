@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { canEdit, codeRequired, EDIT_COOKIE, tokenFor } from "@/lib/auth";
 import { todayISO } from "@/lib/dates";
-import { cleanKost, cleanLijn, cleanPlanItem, cleanTodo } from "@/lib/sanitize";
+import { cleanKost, cleanLijn, cleanMail, cleanPlanItem, cleanTodo } from "@/lib/sanitize";
 import { remove, upsert } from "@/lib/store";
 import type { ActionResult, CollectionName, Collections } from "@/lib/types";
 
@@ -47,11 +47,15 @@ export async function savePlanItem(raw: Record<string, unknown>) {
   return guarded(() => upsert("planning", cleanPlanItem(raw)));
 }
 
+export async function saveMail(raw: Record<string, unknown>) {
+  return guarded(() => upsert("mails", cleanMail(raw)));
+}
+
 export async function deleteItem<K extends CollectionName>(
   name: K,
   id: string,
 ): Promise<ActionResult<Collections[K]>> {
-  if (!["lijnen", "todos", "kosten", "planning"].includes(name)) {
+  if (!["lijnen", "todos", "kosten", "planning", "mails"].includes(name)) {
     return { ok: false, error: "Onbekende collectie" };
   }
   return guarded(() => remove(name, String(id)));

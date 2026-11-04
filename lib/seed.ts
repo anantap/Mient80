@@ -1,3 +1,4 @@
+import { SEED_MAILS } from "./seed-mails";
 import type { Collections } from "./types";
 
 export const SEED: Collections = {
@@ -196,4 +197,5 @@ export const SEED: Collections = {
     { id: "p10", titel: "Showroomafspraak Hans van der Helm, 15:00", type: "mijlpaal", start: "2026-10-30", eind: null, partij: "hvdh", klaar: true, kritiek: false, onzeker: false, notitie: "Met Yrsha, Weimarstraat 173. Voordeligere opties voor oven, kookplaat en koelkast bespreken (Proline glanzend zwart, opbouwkookplaat, oven zonder wifi)." },
     { id: "p9", titel: "Uitwijkvenster plaatsing", type: "periode", start: "2027-03-15", eind: "2027-03-31", partij: "baasklus", klaar: false, kritiek: false, onzeker: true, notitie: "Als de levering niet op tijd bevestigd is" },
   ],
+  mails: SEED_MAILS,
 };

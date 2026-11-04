@@ -1,4 +1,4 @@
-import { AlarmClock, ChefHat, Flag, Hammer, House, ListChecks, Ruler, Users, Wrench, type LucideIcon } from "lucide-react";
+import { AlarmClock, ChefHat, Flag, Hammer, House, Landmark, ListChecks, Ruler, Users, Wrench, type LucideIcon } from "lucide-react";
 import type { Partij, PlanItem } from "@/lib/types";
 
 export const PARTIJ_ICON: Record<Partij, LucideIcon> = {
@@ -6,6 +6,7 @@ export const PARTIJ_ICON: Record<Partij, LucideIcon> = {
   baboon: Ruler,
   baasklus: Hammer,
   hvdh: ChefHat,
+  financiering: Landmark,
   wij: House,
   overig: Users,
 };
@@ -23,6 +24,7 @@ export const PARTIJ_INITIALEN: Record<Partij, string> = {
   baboon: "BA",
   baasklus: "BK",
   hvdh: "HH",
+  financiering: "€",
   wij: "",
   overig: "…",
 };

@@ -34,7 +34,9 @@ export function WeekGrid({
   const weeks = Array.from({ length: GRID_WEEKS }, (_, i) => addDays(monday, i * 7));
   const thisMonday = mondayOf(today);
   const rows = PARTIJEN.filter(
-    (p) => p.id !== "overig" || planning.some((i) => i.partij === "overig" && weeks.some((w) => inWeek(i, w))),
+    (p) =>
+      (p.id !== "overig" && p.id !== "financiering") ||
+      planning.some((i) => i.partij === p.id && weeks.some((w) => inWeek(i, w))),
   );
 
   return (

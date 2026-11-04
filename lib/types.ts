@@ -37,7 +37,7 @@ export interface Kost {
 }
 
 export type PlanType = "mijlpaal" | "deadline" | "periode";
-export type Partij = "multimar" | "baboon" | "baasklus" | "hvdh" | "wij" | "overig";
+export type Partij = "multimar" | "baboon" | "baasklus" | "hvdh" | "financiering" | "wij" | "overig";
 
 export interface PlanItem {
   id: string;
@@ -54,11 +54,28 @@ export interface PlanItem {
   notitie: string;
 }
 
+export interface Mail {
+  id: string;
+  /** ISO-datum (yyyy-mm-dd) */
+  datum: string;
+  /** Afzender of ontvanger, bijv. "Lindy (Baboon)" */
+  van: string;
+  partij: Partij;
+  richting: "in" | "uit";
+  onderwerp: string;
+  samenvatting: string;
+  lijnId: string | null;
+  belangrijk: boolean;
+  /** Gmail-thread-id voor de link naar de mail */
+  threadId: string | null;
+}
+
 export interface Collections {
   lijnen: Lijn[];
   todos: Todo[];
   kosten: Kost[];
   planning: PlanItem[];
+  mails: Mail[];
 }
 
 export type CollectionName = keyof Collections;
@@ -95,6 +112,7 @@ export const PARTIJEN: { id: Partij; naam: string }[] = [
   { id: "baasklus", naam: "Baas klus" },
   { id: "hvdh", naam: "Hans van der Helm" },
   { id: "wij", naam: "Wij" },
+  { id: "financiering", naam: "Financiering" },
   { id: "overig", naam: "Overig" },
 ];
 

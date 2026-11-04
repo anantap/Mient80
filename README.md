@@ -49,6 +49,9 @@ Overige scripts: `npm run build`, `npm run typecheck`.
 - `components/`: UI per tab, zijbalk, bewerkslot (`EditProvider`).
 - `lib/`: types, seeddata, Redis-opslag, datum- en bedraghelpers, invoercontrole.
 - `scripts/seed.ts`: vult Redis met de beginwaarden.
+- `lib/seed-mails.ts`: samenvattingen van het mailverkeer voor de tab Mail. Nieuwe mails komen erbij op verzoek
+  (Claude leest de verbouwingsmails in Gmail en voegt samenvattingen toe via een migratie); je kunt ze ook zelf
+  toevoegen of aanpassen in de site.
 
 Data staat per collectie in een Redis-hash (`mient80:v2:lijnen`, `mient80:v2:todos`, `mient80:v2:kosten`,
 `mient80:v2:planning`), met elk item als eigen veld. Zo kunnen twee wijzigingen kort na elkaar elkaar niet

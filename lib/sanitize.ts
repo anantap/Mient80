@@ -5,6 +5,7 @@ import {
   STATUS_ORDER,
   type Kost,
   type Lijn,
+  type Mail,
   type Partij,
   type PlanItem,
   type PlanType,
@@ -94,5 +95,23 @@ export function cleanPlanItem(r: Raw): PlanItem {
     kritiek: r.kritiek === true,
     onzeker: r.onzeker === true,
     notitie: str(r.notitie),
+  };
+}
+
+export function cleanMail(r: Raw): Mail {
+  const datum = date(r.datum);
+  if (!datum) throw new Error("Datum is verplicht");
+  const threadId = str(r.threadId, 40);
+  return {
+    id: id(r.id),
+    datum,
+    van: str(r.van, 200),
+    partij: oneOf(r.partij, PARTIJ_IDS, "overig"),
+    richting: r.richting === "uit" ? "uit" : "in",
+    onderwerp: required(str(r.onderwerp, 300), "Onderwerp"),
+    samenvatting: str(r.samenvatting, 4000),
+    lijnId: r.lijnId ? id(r.lijnId) : null,
+    belangrijk: r.belangrijk === true,
+    threadId: /^[0-9a-f]{6,32}$/.test(threadId) ? threadId : null,
   };
 }
